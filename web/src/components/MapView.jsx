@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
+import MapControls from './MapControls.jsx';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -8,6 +9,7 @@ const abs = (u) => new URL(u, window.location.origin).toString();
 
 export default function MapView({ apiBase }) {
   const ref = useRef(null);
+  const [mapInstance, setMapInstance] = useState(null);
 
   useEffect(() => {
     const map = new mapboxgl.Map({
@@ -17,8 +19,8 @@ export default function MapView({ apiBase }) {
       zoom: 9.5,
       pitch: 45,                 // 3D valley view
     });
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
+    setMapInstance(map);
 
     map.on('style.load', () => {
       map.addSource('dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512 });
@@ -47,8 +49,16 @@ export default function MapView({ apiBase }) {
       });
     });
 
-    return () => map.remove();
+    return () => {
+      setMapInstance(null);
+      map.remove();
+    };
   }, [apiBase]);
 
-  return <div ref={ref} className="absolute inset-0" />;
+  return (
+    <>
+      <div ref={ref} className="absolute inset-0" />
+      <MapControls map={mapInstance} />
+    </>
+  );
 }
