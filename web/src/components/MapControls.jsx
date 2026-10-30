@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { LuMinus, LuPlus } from 'react-icons/lu';
-import { TbNavigationNorth } from 'react-icons/tb';
+import { LuMinus, LuNavigation2, LuPlus } from 'react-icons/lu';
 
 const buttonClass =
   'flex size-[26px] cursor-pointer items-center justify-center text-white transition-colors ' +
@@ -26,7 +25,7 @@ export default function MapControls({ map }) {
       </button>
       {/* Keeps the 3D pitch; only the bearing resets */}
       <button type="button" className={buttonClass} title="Reset north" aria-label="Reset north" onClick={() => map?.resetNorth()}>
-        <TbNavigationNorth size={16} style={{ transform: `rotate(${-bearing}deg)` }} />
+        <LuNavigation2 size={14} fill="currentColor" style={{ transform: `rotate(${-bearing}deg)` }} />
       </button>
     </div>
   );
