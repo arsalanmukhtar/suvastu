@@ -23,36 +23,40 @@ html, body, #root { height: 100%; }
   font-family: var(--font-sans);
 }
 
-.mapboxgl-ctrl-top-right .mapboxgl-ctrl { margin: 16px 16px 0 0; }
-.mapboxgl-ctrl-bottom-left .mapboxgl-ctrl { margin: 0 0 16px 16px; }
-.mapboxgl-ctrl-bottom-right .mapboxgl-ctrl { margin: 0 16px 16px 0; }
+.mapboxgl-ctrl-top-right .mapboxgl-ctrl { margin: 10px 10px 0 0; }
+/* Scale and attribution sit flush in their corners */
+.mapboxgl-ctrl-bottom-left .mapboxgl-ctrl { margin: 0; }
+.mapboxgl-ctrl-bottom-right .mapboxgl-ctrl { margin: 0; }
 
 /* Navigation */
 .mapboxgl-ctrl-group {
   overflow: hidden;
   border: 1px solid var(--map-panel-border);
-  border-radius: 12px;
+  border-radius: 8px;
   background: var(--map-panel);
   backdrop-filter: blur(10px);
 }
 .mapboxgl-ctrl-group:not(:empty) { box-shadow: var(--map-panel-shadow); }
 .mapboxgl-ctrl-group button {
-  width: 38px;
-  height: 38px;
+  width: 26px;
+  height: 26px;
   transition: background-color 150ms ease;
 }
 .mapboxgl-ctrl-group button + button { border-top: 1px solid var(--map-panel-border); }
 .mapboxgl-ctrl-group button:not(:disabled):hover { background-color: var(--color-river); }
 .mapboxgl-ctrl-group button:focus:focus-visible { box-shadow: inset 0 0 0 2px var(--color-bar); }
 /* Mapbox icons are dark; hue-rotate keeps the compass north arrow red */
-.mapboxgl-ctrl-group button .mapboxgl-ctrl-icon { filter: invert(1) hue-rotate(180deg); }
+.mapboxgl-ctrl-group button .mapboxgl-ctrl-icon {
+  background-size: 100%;
+  filter: invert(1) hue-rotate(180deg);
+}
 
 /* Scale bar: the amber edge is the measured length */
 .mapboxgl-ctrl-scale {
   padding: 2px 8px;
   border: 0;
   border-bottom: 2px solid var(--color-bar);
-  border-radius: 6px 6px 0 0;
+  border-radius: 0 6px 0 0;
   background-color: var(--map-panel);
   color: #fff;
   font-size: 11px;
@@ -64,8 +68,8 @@ html, body, #root { height: 100%; }
 .mapboxgl-ctrl-attrib,
 .mapboxgl-ctrl-attrib.mapboxgl-compact {
   padding: 3px 10px;
-  border: 1px solid var(--map-panel-border);
-  border-radius: 8px;
+  border: 0;
+  border-radius: 6px 0 0 0;
   background-color: var(--map-panel);
   color: #fff;
   font-size: 11px;
