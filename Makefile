@@ -22,7 +22,7 @@ creds:            ## verify Earthdata + HyP3 credentials
 	docker compose run --rm worker suvastu.hyp3_jobs credits
 
 s1-search:
-	docker compose run --rm worker suvastu.search_s1 --start 2022-03-01 --end 2026-11-30 --level SLC
+	docker compose run --rm worker suvastu.search_s1 --level SLC
 
 worker-shell:
 	docker compose run --rm --entrypoint bash worker

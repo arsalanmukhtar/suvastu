@@ -7,8 +7,8 @@ from .config import AOI_WKT, DB_URL
 
 
 @click.command()
-@click.option("--start", default="2019-03-01", help="YYYY-MM-DD")
-@click.option("--end", default="2026-11-30", help="YYYY-MM-DD")
+@click.option("--start", envvar="S1_START", default="2019-03-01", help="YYYY-MM-DD")
+@click.option("--end", envvar="S1_END", default="2026-11-30", help="YYYY-MM-DD")
 @click.option("--level", default="SLC", type=click.Choice(["SLC", "GRD_HD"]))
 def main(start, end, level):
     results = asf.search(
