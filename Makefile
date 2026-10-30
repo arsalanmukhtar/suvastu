@@ -1,4 +1,4 @@
-.PHONY: up down reset logs psql ps creds s1-search worker-shell build-prod
+.PHONY: up down reset logs psql ps creds s1-search reaches worker-shell build-prod
 
 up:
 	docker compose up -d --build
@@ -23,6 +23,9 @@ creds:            ## verify Earthdata + HyP3 credentials
 
 s1-search:
 	docker compose run --rm worker suvastu.search_s1 --level SLC
+
+reaches:          ## segment the Swat main stem into 500 m reaches
+	docker compose run --rm worker suvastu.build_reaches
 
 worker-shell:
 	docker compose run --rm --entrypoint bash worker
