@@ -1,0 +1,9 @@
+.env
+node_modules/
+dist/
+data/raw/*
+!data/raw/.gitkeep
+data/cogs/*
+!data/cogs/.gitkeep
+__pycache__/
+*.pyc

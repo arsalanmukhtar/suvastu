@@ -1,0 +1,78 @@
+name: suvastu
+
+services:
+  db:
+    image: postgis/postgis:17-3.5
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build:
+      context: ./api
+      target: dev
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: ${API_PORT}
+    ports:
+      - "${API_PORT}:4000"
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./web
+      target: dev
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "${WEB_PORT:-5175}:5173"
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    depends_on:
+      - api
+
+  tiler:
+    image: ghcr.io/developmentseed/titiler:latest
+    restart: unless-stopped
+    environment:
+      PORT: 8000
+      WORKERS_PER_CORE: 1
+      CPL_VSIL_CURL_ALLOWED_EXTENSIONS: .tif,.TIF,.tiff
+      GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+    ports:
+      - "${TILER_PORT}:8000"
+    volumes:
+      - ./data/cogs:/data/cogs:ro
+
+  worker:
+    build: ./worker
+    env_file: .env
+    volumes:
+      - ./worker:/app
+      - ./data:/data
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles: ["worker"]   # run on demand: docker compose run --rm worker ...
+
+volumes:
+  pgdata:

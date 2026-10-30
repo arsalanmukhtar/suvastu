@@ -1,0 +1,23 @@
+services:
+  db:
+    ports: !reset []          # do not expose Postgres publicly
+
+  api:
+    build:
+      context: ./api
+      target: prod
+    volumes: !reset []
+    ports: !reset []
+
+  web:
+    build:
+      context: ./web
+      target: prod
+      args:
+        VITE_MAPBOX_TOKEN: ${VITE_MAPBOX_TOKEN}
+        VITE_MAPBOX_STYLE: ${VITE_MAPBOX_STYLE}
+    volumes: !reset []
+    ports: !reset ["80:80"]
+
+  tiler:
+    ports: !reset []
